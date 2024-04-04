@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 # sets up a web servers for the deployment of web_static
-# Create the folder /data/web_static/releases/test/ and all subsequent folders if it doesn’t already exist
-# Create a fake HTML file /data/web_static/releases/test/index.html
 
 sudo apt-get -y update
 sudo apt-get -y install nginx
