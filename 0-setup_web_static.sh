@@ -4,8 +4,8 @@
 sudo apt-get -y update
 sudo apt-get -y install nginx
 
-mkdir -p /data/web_static/releases/test
-mkdir -p /data/web_static/shared
+sudo mkdir -p /data/web_static/releases/test/
+sudo mkdir -p /data/web_static/shared/
 
 echo "<html>
 	<head>
@@ -17,7 +17,7 @@ echo "<html>
 
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-sudo chown -R ubuntu:group /data/
+sudo chown -R ubuntu:ubuntu /data/
 
 echo "server {
 	listen 80 default_server;
