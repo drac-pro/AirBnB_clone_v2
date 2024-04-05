@@ -15,3 +15,4 @@ def do_pack():
     local("tar -czvf {} web_static".format(file))
     if not os.path.exists(file):
         return None
+    return file
