@@ -12,7 +12,7 @@ env.hosts = ['52.4.1.57', '52.3.244.12']
 def do_deploy(archive_path):
     """distributes an archive to your web servers
     Args:
-        archive_path
+        archive_path(string)
     Returns:
         true otherwise false
     """
