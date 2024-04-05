@@ -12,14 +12,15 @@ env.hosts = ['52.4.1.57', '52.3.244.12']
 
 def do_pack():
     """generates a .tgz archive from the contents of the web_static folder"""
-    if not os.path.isdir('versions'):
+    date = datetime.now().strftime("%Y%m%d%H%M%S")
+
+    try:
         local('mkdir -p versions')
-    file = "versions/web_static_{}.tgz".\
-        format(datetime.now().strftime("%Y%m%d%H%M%S"))
-    local("tar -czvf {} web_static".format(file))
-    if not os.path.exists(file):
+        filename = 'web_static_{}.tgz'.format(date)
+        local('tar -cvzf versions/{} web_static'.format(filename))
+        return ("versions/{}".format(filename))
+    except Exception:
         return None
-    return file
 
 
 def do_deploy(archive_path):
