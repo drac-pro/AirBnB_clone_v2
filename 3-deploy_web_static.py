@@ -2,7 +2,7 @@
 """Fabric script (based on the file 2-do_deploy_web_static.py) that creates
 and distributes an archive to your web servers"""
 from datetime import datetime
-from fabric.api import local, env, put, run
+from fabric.api import local, env, put, run, runs_once
 import os
 
 
@@ -10,6 +10,7 @@ env.user = 'ubuntu'
 env.hosts = ['52.4.1.57', '52.3.244.12']
 
 
+@runs_once
 def do_pack():
     """generates a .tgz archive from the contents of the web_static folder"""
     if not os.path.isdir('versions'):
@@ -41,7 +42,7 @@ def do_deploy(archive_path):
         run("mkdir -p {}".format(remote_path))
         run('tar -xzf /tmp/{} -C {} --strip-components=1'.format
             (file_ext, remote_path))
-        run('rm /tmp/{}'.format(file_ext))
+        run('rm -rf /tmp/{}'.format(file_ext))
         run('rm -rf /data/web_static/current')
         run('ln -s {} /data/web_static/current'.format(remote_path))
         return True
@@ -49,11 +50,9 @@ def do_deploy(archive_path):
         return False
 
 
-file = do_pack()
-
-
 def deploy():
     """creates and distributes an archive to your web servers"""
-    if file is None:
+    archive_path = do_pack()
+    if archive_path is None:
         return False
-    return do_deploy(file)
+    return do_deploy(archive_path)
