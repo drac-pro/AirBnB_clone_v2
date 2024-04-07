@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Fabric script that deletes out-of-date archives"""
-from fabric.api import env, run, local
+from fabric.api import env, run, local, cd, lcd
+import os
 
 
 env.user = 'ubuntu'
@@ -12,17 +13,17 @@ def do_clean(number=0):
     Args:
         number(int) - number of archives to keep
     """
-    number = int(number)
-    if number < 0:
-        return
-    if number == 0:
-        number = 1
 
-    if env.host_string == env.hosts[0]:
-        local(f"find ./versions/ -type f -name 'web_static_*.tgz'"
-              f" | grep -E './versions/web_static_[0-9]{{14}}.tgz'"
-              f" | sort | head -n -{number} | xargs -I [] rm -rf []")
+    number = 1 if int(number) == 0 else int(number)
 
-    run(f"find /data/web_static/releases/ -type d -name 'web_static_*'"
-        f" | grep -E '/data/web_static/releases/web_static_[0-9]{{14}}'"
-        f" | sort | head -n -{number} | xargs -I [] rm -rf []")
+    archives = sorted(os.listdir("versions"))
+    [archives.pop() for i in range(number)]
+
+    with lcd("versions"):
+        [local("rm ./{}".format(a)) for a in archives]
+
+    with cd("/data/web_static/releases"):
+        archives = run("ls -tr").split()
+        archives = [a for a in archives if "web_static_" in a]
+        [archives.pop() for i in range(number)]
+        [run("rm -rf ./{}".format(a)) for a in archives]
