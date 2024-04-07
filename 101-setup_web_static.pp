@@ -1,33 +1,27 @@
 # Configures a web server for deployment of web_static.
-
 # Nginx configuration file
+
 $nginx_conf = "server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-	root /var/www/html;
-	index index.html index.htm index.nginx-debian.html;
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    add_header X-Served-By ${hostname};
+    root   /var/www/html;
+    index  index.html index.htm;
 
-	add_header X-Served-By $HOSTNAME;
+    location /hbnb_static {
+        alias /data/web_static/current;
+        index index.html index.htm;
+    }
 
-	server_name _;
+    location /redirect_me {
+        return 301 http://cuberule.com/;
+    }
 
-	location / {
-		try_files \$uri \$uri/ =404;
-	}
-
-	location /hbnb_static {
-		alias /data/web_static/current;
-		index index.html index.htm;
-	}
-
-	location /redirect_me {
-		rewrite ^ https://github.com/drac-pro permanent;
-	}
-
-	error_page 404 /404.html;
-	location = /404.html {
-		internal;
-	}
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
 }"
 
 package { 'nginx':
@@ -57,7 +51,7 @@ file { '/data/web_static/shared':
 
 file { '/data/web_static/releases/test/index.html':
   ensure  => 'present',
-  content => "Holberton School Puppet\n"
+  content => "ALX for the win!!"
 } ->
 
 file { '/data/web_static/current':
