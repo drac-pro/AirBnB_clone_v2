@@ -13,7 +13,7 @@ def hello():
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb():i
+def hbnb():
     """simple flask web page"""
     return 'HBNB'
 
