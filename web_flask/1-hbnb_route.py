@@ -11,8 +11,9 @@ def hello():
     """simple flask web page"""
     return 'Hello HBNB!'
 
+
 @app.route('/hbnb', strict_slashes=False)
-def hbnb():
+def hbnb():i
     """simple flask web page"""
     return 'HBNB'
 
