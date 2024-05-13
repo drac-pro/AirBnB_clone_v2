@@ -11,12 +11,13 @@ app = Flask(__name__)
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """list all states"""
-    states = sorted(list(storage.all("State").values()), key=lambda state: state.name)
+    states = sorted(list(storage.all(State).values()),
+                    key=lambda state: state.name)
     return render_template('7-states_list.html', states=states)
 
 
 @app.teardown_appcontext
-def teardowndb_session(exception):
+def closedb_session(exception):
     """Remove the current SQLAlchemy Sessio"""
     storage.close()
 
