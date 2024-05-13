@@ -18,9 +18,9 @@ def states_list():
 
 @app.teardown_appcontext
 def closedb_session(exception):
-    """Remove the current SQLAlchemy Sessio"""
+    """Remove the current SQLAlchemy Session"""
     storage.close()
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port='5000')
